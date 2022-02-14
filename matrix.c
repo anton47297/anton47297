@@ -57,10 +57,16 @@ void outputMatrices(matrix *ms, int nMatrices) {
 // обмен строк с порядковыми
 // номерами i1 и i2 в матрице m
 void swapRows(matrix m, int i1, int i2) {
+    int *temp = m.values[i1];
+    m.values[i1] = m.values[i2];
+    m.values[i2] = temp;
 }
 
 // обмен колонок с порядковыми номерами j1 и j2 в матрице m
 void swapColumns(matrix m, int j1, int j2) {
+    int *t = m.values[j1];
+    m.values[j1] = m.values[j2];
+    m.values[j2] = t;
 }
 
 // выполняет сортировку вставками строк
