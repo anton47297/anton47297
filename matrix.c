@@ -123,22 +123,6 @@ matrix createMatrixFromArray(const int *a, size_t nRows, size_t nCols) {
     return m;
 }
 
-void test_countZeroRows() {
-    matrix m = createMatrixFromArray(
-            (int[]){
-                    1, 1, 0,
-                    0, 0, 0,
-                    0, 0, 1,
-                    0, 0, 0,
-                    0, 1, 1,
-            },
-            5, 3);
-
-    assert(countZeroRows(m, 5, 3) == 2);
-
-    freeMemMatrix(m, 5);
-}
-
 // возвращает указатель на нулевую матрицу массива из nMatrices матриц, размещенных
 // в динамической памяти, построенных из элементов массива a
 matrix *createArrayOfMatrixFromArray(const int *values, size_t nMatrices, size_t nRows, size_t nCols) {
