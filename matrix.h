@@ -31,8 +31,10 @@ void freeMemMatrix(matrix m);
 
 // освобождает память, выделенную под хранение массива ms из nMatrices матриц
 void freeMemMatrices(matrix *ms, int nMatrices);
+
 // ввод матрицы m
 void inputMatrix(matrix *m);
+
 // ввод массива из
 // nMatrices матриц, хранящейся по адресу ms.
 void inputMatrices(matrix *ms, int nMatrices);
@@ -80,6 +82,7 @@ bool isSymmetricMatrix(matrix m);
 
 // транспонирует квадратную матрицу m
 void transposeSquareMatrix(matrix m);
+
 // возвращает позицию минимального элемента матрицы m
 position getMinValuePos(matrix m);
 

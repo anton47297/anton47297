@@ -21,10 +21,13 @@ matrix *getMemArrayOfMatrices(int nMatrices, int nRows, int nCols) {
 // освобождает память, выделенную под
 // хранение матрицы m
 void freeMemMatrix(matrix m) {
+    getMemMatrix(0, 0);
 }
 
 // освобождает память, выделенную под хранение массива ms из nMatrices матриц
 void freeMemMatrices(matrix *ms, int nMatrices) {
+    getMemArrayOfMatrices(ms, 0, 0);
+    free(ms);
 }
 
 // ввод матрицы m
