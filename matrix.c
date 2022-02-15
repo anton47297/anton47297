@@ -35,7 +35,7 @@ void freeMemMatrices(matrix *ms, int nMatrices) {
 
 // ввод матрицы m
 void inputMatrix(matrix *m) {
-    for (int i = 0; i < m->nRows;i++) {
+    for (int i = 0; i < m->nRows; i++) {
         for (int j = 0; j < m->nCols; j++) {
             scanf("%d", &m->values[i][j]);
         }
@@ -259,4 +259,38 @@ void sortColsByMinElement(matrix m) {
     insertionSortColsMatrixByColCriteria(m, getMin);
 }
 
+/* 4 task */
 
+matrix mulMatrices(matrix m1, matrix m2) {
+    assert(m1.nCols == m2.nRows);
+    matrix newMatrix = getMemMatrix(m1.nRows, m2.nCols);
+    for (int i = 0; i < m1.nRows; i++) {
+        for (int j = 0; j < m2.nCols; j++) {
+            newMatrix.values[i][j] = 0;
+            for (int k = 0; k < m1.nCols; k++) {
+                newMatrix.values[i][j] += m1.values[i][k] * m2.values[k][j];
+            }
+        }
+    }
+    return (matrix) newMatrix;
+}
+
+void getSquareOfMatrixIfSymmetric(matrix *m) {
+    if (!isSymmetricMatrix(*m))
+        return;
+
+    matrix squareMatrix = mulMatrices(*m, *m);
+
+    *m = squareMatrix;
+}
+
+/* 5 task */
+
+bool isUnique(long long *a, int n) {
+}
+
+long long getSum(int *a, int n) {
+}
+
+void transposeIfMatrixHasNotEqualSumOfRows(matrix m) {
+}
