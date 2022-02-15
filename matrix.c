@@ -90,7 +90,7 @@ void insertionSortRowsMatrixByRowCriteria(matrix m, int (*criteria)(int *, int))
         rowsCriteria[i] = criteria(m.values[i], m.nRows);
     for (int i = 1; i < m.nRows; i++) {
         for (int j = i; j > 0 && rowsCriteria[j - 1] > rowsCriteria[j]; j--) {
-            swap(&rowsCriteria[j - 1], &rowsCriteria[j]);
+            swap(&rowsCriteria[j - 1], &rowsCriteria[j], sizeof(int));
             swapRows(m, j, j - 1);
         }
     }
@@ -109,7 +109,7 @@ void insertionSortColsMatrixByColCriteria(matrix m, int (*criteria)(int *, int))
     }
     for (int i = 1; i < m.nCols; i++) {
         for (int j = i; j > 0 && colsCriteria[j - 1] > colsCriteria[j]; j--) {
-            swap(&colsCriteria[j - 1], &colsCriteria[j]);
+            swap(&colsCriteria[j - 1], &colsCriteria[j], sizeof(int));
             swapRows(m, j, j - 1);
         }
     }
@@ -165,7 +165,7 @@ void transposeSquareMatrix(matrix m) {
     for (int rIndex = 0; rIndex < m.nRows; ++rIndex) {
         for (int cIndex = 0; cIndex < rIndex; ++cIndex) {
             if (rIndex != cIndex)
-                swap(&m.values[rIndex][cIndex], &m.values[cIndex][rIndex]);
+                swap(&m.values[rIndex][cIndex], &m.values[cIndex][rIndex], sizeof(int));
         }
     }
 }
@@ -243,5 +243,7 @@ int getMax(int *a, const size_t n) {
 void sortRowsByMaxElement(matrix m) {
     insertionSortRowsMatrixByRowCriteria(m, getMax);
 }
+
+
 
 

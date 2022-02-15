@@ -18,10 +18,16 @@ typedef struct position {
     int colIndex;
 } position;
 
-void swap(int *a, int *b) {
-    int t = *a;
-    *a = *b;
-    *b = t;
+void swap(void *x, void *y, const size_t n) {
+    char *a= x;
+    char *b = y;
+    for (size_t i = 0; i < n; i++) {
+        char t = *a;
+        *a = *b;
+        *b = t;
+        a++;
+        b++;
+    }
 }
 
 // размещает в динамической памяти матрицу размером nRows на nRows
