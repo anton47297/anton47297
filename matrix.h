@@ -17,11 +17,17 @@ typedef struct position {
     int colIndex;
 } position;
 
-// размещает в динамической памяти матрицу размером nRows на nCols
+void swap(int *a, int *b) {
+    int t = *a;
+    *a = *b;
+    *b = t;
+}
+
+// размещает в динамической памяти матрицу размером nRows на nRows
 // возвращает матрицу
 matrix getMemMatrix(int nRows, int nCols);
 
-// размещает в динамической памяти массив из nMatrices матриц размером nRows на nCols
+// размещает в динамической памяти массив из nMatrices матриц размером nRows на nRows
 // возвращает указатель на нулевую матрицу.
 matrix *getMemArrayOfMatrices(int nMatrices, int nRows, int nCols);
 
@@ -69,8 +75,7 @@ bool isSquareMatrix(matrix m);
 
 // возвращает значение
 // ’истина’, если матрицы m1 и m2 равны, ложь – в противном случае.
-bool twoMatricesEqual(matrix m1, matrix m2);
-
+bool areTwoMatricesEqual(matrix m1, matrix m2);
 
 // возвращает значение ’истина’, если матрица
 // m является единичной, ложь – в противном случае
@@ -89,18 +94,13 @@ position getMinValuePos(matrix m);
 // возвращает позицию максимального элемента матрицы m
 position getMaxValuePos(matrix m);
 
-// возвращает матрицу, размера nRows на nCols,
+// возвращает матрицу, размера nRows на nRows,
 // построенного из элементов массива a, размещенную в динамической
 // памяти
 matrix createMatrixFromArray(const int *a, size_t nRows, size_t nCols);
 
-
-void test_countZeroRows();
-
 // возвращает указатель на нулевую матрицу массива из nMatrices матриц, размещенных
 // в динамической памяти, построенных из элементов массива a
 matrix *createArrayOfMatrixFromArray(const int *values, size_t nMatrices, size_t nRows, size_t nCols);
-
-
 
 #endif//UNTITLED79LABA5DD_MATRIX_H
