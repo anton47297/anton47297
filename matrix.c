@@ -222,11 +222,26 @@ matrix *createArrayOfMatrixFromArray(const int *values, size_t nMatrices, size_t
 
 /* 2 часть */
 
+/* 1 task */
 void swapRowsWithMinValuesAndMaxValues(matrix m) {
     position maxPos = getMaxValuePos(m);
     position minPos = getMinValuePos(m);
 
     swapRows(m, maxPos.rowIndex, minPos.rowIndex);
+}
+
+/* 2 task */
+int getMax(int *a, const size_t n) {
+    int max = a[0];
+    for (int i = 0; i < n; i++) {
+        if (a[i] > max)
+            max = a[i];
+    }
+    return max;
+}
+
+void sortRowsByMaxElement(matrix m) {
+    insertionSortRowsMatrixByRowCriteria(m, getMax);
 }
 
 
