@@ -161,9 +161,13 @@ bool isSymmetricMatrix(matrix m) {
 
 // транспонирует квадратную матрицу m
 void transposeSquareMatrix(matrix m) {
-    for (int i = 0; i < m.nRows; i++)
-        for (int j = 0; j < m.nCols; j++)
-            m.values[j][i] = m.values[i][j];
+    assert(isSquareMatrix(m));
+    for (int rIndex = 0; rIndex < m.nRows; ++rIndex) {
+        for (int cIndex = 0; cIndex < rIndex; ++cIndex) {
+            if (rIndex != cIndex)
+                swap(&m.values[rIndex][cIndex], &m.values[cIndex][rIndex]);
+        }
+    }
 }
 
 // возвращает позицию минимального элемента матрицы m
@@ -217,5 +221,12 @@ matrix *createArrayOfMatrixFromArray(const int *values, size_t nMatrices, size_t
 }
 
 /* 2 часть */
+
+void swapRowsWithMinValuesAndMaxValues(matrix m) {
+    position maxPos = getMaxValuePos(m);
+    position minPos = getMinValuePos(m);
+
+    swapRows(m, maxPos.rowIndex, minPos.rowIndex);
+}
 
 

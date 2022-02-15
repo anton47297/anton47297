@@ -1,10 +1,11 @@
 #ifndef UNTITLED79LABA5DD_MATRIX_H
 #define UNTITLED79LABA5DD_MATRIX_H
 
-#include <assert.h>
 #include <malloc.h>
-#include <stdbool.h>
+#include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
+#include <assert.h>
 
 typedef struct matrix {
     int **values;// элементы матрицы
@@ -71,7 +72,6 @@ void insertionSortColsMatrixByColCriteria(matrix m, int (*criteria)(int *, int))
 // возвращает значение ’истина’, если
 // матрица m является квадратной, ложь – в противном случае
 bool isSquareMatrix(matrix m);
-
 
 // возвращает значение
 // ’истина’, если матрицы m1 и m2 равны, ложь – в противном случае.
