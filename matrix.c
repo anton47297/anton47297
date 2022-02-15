@@ -35,7 +35,7 @@ void freeMemMatrices(matrix *ms, int nMatrices) {
 
 // ввод матрицы m
 void inputMatrix(matrix *m) {
-    scanf("%d %d %d", &**(m->values), &m->nRows, &m->nRows);
+    scanf("%d %d %d", &**(m->values), &m->nRows, &m->nCols);
 }
 
 // ввод массива из
@@ -47,7 +47,7 @@ void inputMatrices(matrix *ms, int nMatrices) {
 
 // вывод матрицы m
 void outputMatrix(matrix m) {
-    printf("%d %d %d", **(m.values), m.nRows, m.nRows);
+    printf("%d %d %d", **(m.values), m.nRows, m.nCols);
 }
 
 //  вывод массива из nMatrices матриц, хранящейся по адресу ms
