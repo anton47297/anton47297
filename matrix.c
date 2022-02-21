@@ -90,7 +90,7 @@ void insertionSortRowsMatrixByRowCriteria(matrix m, int (*criteria)(int *, int))
         rowsCriteria[i] = criteria(m.values[i], m.nRows);
     for (int i = 1; i < m.nRows; i++) {
         for (int j = i; j > 0 && rowsCriteria[j - 1] > rowsCriteria[j]; j--) {
-            swap(&rowsCriteria[j - 1], &rowsCriteria[j], sizeof(int));
+            swap_swap(&rowsCriteria[j - 1], &rowsCriteria[j], sizeof(int));
             swapRows(m, j, j - 1);
         }
     }
@@ -109,7 +109,7 @@ void insertionSortColsMatrixByColCriteria(matrix m, int (*criteria)(int *, int))
     }
     for (int i = 1; i < m.nCols; i++) {
         for (int j = i; j > 0 && colsCriteria[j - 1] > colsCriteria[j]; j--) {
-            swap(&colsCriteria[j - 1], &colsCriteria[j], sizeof(int));
+            swap_swap(&colsCriteria[j - 1], &colsCriteria[j], sizeof(int));
             swapRows(m, j, j - 1);
         }
     }
@@ -118,19 +118,21 @@ void insertionSortColsMatrixByColCriteria(matrix m, int (*criteria)(int *, int))
 // возвращает значение ’истина’, если
 // матрица m является квадратной, ложь – в противном случае
 bool isSquareMatrix(matrix m) {
-    if (m.nRows == m.nCols)
-        return true;
-    else
-        return false;
+    return m.nRows == m.nCols;
 }
 
 // возвращает значение
 // ’истина’, если матрицы m1 и m2 равны, ложь – в противном случае.
 bool areTwoMatricesEqual(matrix m1, matrix m2) {
-    if (m1.values == m2.values)
-        return true;
-    else
+    if (m1.nRows != m2.nRows || m1.nCols != m2.nCols)
         return false;
+    for (int rIndex = 0; rIndex < m1.nRows; rIndex++) {
+        for (int cIndex = 0; cIndex < m1.nCols; ++cIndex) {
+            if (m1.values[rIndex][cIndex] != m2.values[rIndex][cIndex])
+                return false;
+        }
+    }
+    return true;
 }
 
 // возвращает значение ’истина’, если матрица
@@ -165,7 +167,7 @@ void transposeSquareMatrix(matrix m) {
     for (int rIndex = 0; rIndex < m.nRows; ++rIndex) {
         for (int cIndex = 0; cIndex < rIndex; ++cIndex) {
             if (rIndex != cIndex)
-                swap(&m.values[rIndex][cIndex], &m.values[cIndex][rIndex], sizeof(int));
+                swap_swap(&m.values[rIndex][cIndex], &m.values[cIndex][rIndex], sizeof(int));
         }
     }
 }
@@ -294,3 +296,18 @@ long long getSum(int *a, int n) {
 
 void transposeIfMatrixHasNotEqualSumOfRows(matrix m) {
 }
+
+/* 6 task */
+
+bool isMutuallyInverseMatrices(matrix m1, matrix m2) {
+    if (m1.nRows != m2.nRows || m1.nCols != m2.nCols)
+        return false;
+
+    matrix m = mulMatrices(m1, m2);
+    bool res = isEMatrix(m);
+
+    freeMemMatrix(m);
+
+    return res;
+}
+

@@ -6,6 +6,8 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <assert.h>
+#include <memory.h>
+#include <math.h>
 
 typedef struct matrix {
     int **values;// элементы матрицы
@@ -18,7 +20,7 @@ typedef struct position {
     int colIndex;
 } position;
 
-void swap(void *x, void *y, const size_t n) {
+void swap_swap(void *x, void *y, const size_t n) {
     char *a= x;
     char *b = y;
     for (size_t i = 0; i < n; i++) {
