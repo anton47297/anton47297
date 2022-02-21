@@ -311,3 +311,32 @@ bool isMutuallyInverseMatrices(matrix m1, matrix m2) {
     return res;
 }
 
+/* 7 task */
+
+int max(int a, int b) {
+    return a > b ? a : b;
+}
+
+long long findSumOfMaxesOfPseudoDiagonal(matrix m) {
+    int nDiagonal = m.nRows + m.nCols - 1;
+    int *diagonalMaxEl = malloc(sizeof(int) * nDiagonal);
+    int diagonalStartIndex = m.nRows - 1;
+
+    for (int rIndex = 0; rIndex < m.nRows; ++rIndex) {
+        for (int cIndex = 0; cIndex < m.nCols; ++cIndex) {
+            int dIndex = diagonalStartIndex + cIndex - rIndex;
+
+            if (rIndex == 0 || cIndex == 0)
+                diagonalMaxEl[dIndex] = m.values[rIndex][cIndex];
+            else
+                diagonalMaxEl[dIndex] = max(diagonalMaxEl[dIndex], m.values[rIndex][cIndex]);
+        }
+    }
+    diagonalMaxEl[diagonalStartIndex] = 0;
+
+    long long res = getSum(diagonalMaxEl, nDiagonal);
+
+    free(diagonalMaxEl);
+
+    return res;
+}
