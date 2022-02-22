@@ -570,3 +570,28 @@ void printMatrixWithMaxZeroRows(matrix *ms, int nMatrix) {
         if (maxZeroMatrix[i] == max)
             outputMatrix(ms[i]);
 }
+
+/* 15 task */
+
+int getNormMatrix(matrix ms) {
+    position minPos = getMinValuePos(ms);
+    position maxPos = getMaxValuePos(ms);
+    int norm = max(abs(ms.values[maxPos.rowIndex][maxPos.colIndex]),
+                   abs(ms.values[minPos.rowIndex][minPos.colIndex]));
+
+    return norm;
+}
+
+void printOfMatricesInTheMinNorm(matrix *ms, int nMatrix) {
+    int *normMatrix = (int *) malloc(sizeof(int) * nMatrix);
+
+    for (int i = 0; i < nMatrix; ++i)
+        normMatrix[i] = getNormMatrix(ms[i]);
+
+    int minNorm = getMin(normMatrix, nMatrix);
+
+    for (int i = 0; i < nMatrix; ++i) {
+        if (minNorm == normMatrix[i])
+            outputMatrix(ms[i]);
+    }
+}
