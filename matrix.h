@@ -34,6 +34,17 @@ void universalSwap(void *x, void *y, const size_t n) {
     }
 }
 
+int maxArray(int *a, int size) {
+    int max = a[0];
+    for (size_t i = 1; i < size; i++) {
+        if (a[i] > max) {
+            max = a[i];
+        }
+    }
+    return max;
+}
+
+
 // размещает в динамической памяти матрицу размером nRows на nRows
 // возвращает матрицу
 matrix getMemMatrix(int nRows, int nCols);

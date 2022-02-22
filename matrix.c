@@ -424,37 +424,6 @@ void sortByDistances(matrix m) {
 
 /* 10 task */
 
-int cmp_long_long(const void *pa, const void *pb) {
-    long long arg1 = *(const long long *) pa;
-    long long arg2 = *(const long long *) pb;
-    if (arg1 < arg2)
-        return -1;
-    if (arg1 > arg2)
-        return 1;
-    return 0;
-}
-
-int countNUnique(long long *a, int n) {
-    qsort(a, n, sizeof(long long), cmp_long_long);
-    int count = 1;
-    for (int i = 1; i < n; ++i) {
-        if (a[i] != a[i - 1])
-            count++;
-    }
-    return count;
-}
-
-int countEqClassesByRowsSum(matrix m) {
-    long long *sum = malloc(sizeof(long long) * m.nRows);
-    for (int i = 0; i < m.nRows; ++i)
-        sum[i] = getSum(m.values[i], m.nCols);
-    int res = countNUnique(sum, m.nRows);
-
-    free(sum);
-
-    return res;
-}
-
 /* 11 task */
 
 int getNSpecialElement(matrix m) {
@@ -541,3 +510,32 @@ int countNonDescendingRowsMatrices(matrix *ms, int nMatrix) {
 }
 
 /* 14 task */
+
+int countValues(const int *a, int n, int value) {
+    int count = 0;
+    for (size_t i = 0; i < n; i++) {
+        if (a[i] == value)
+            count++;
+    }
+    return count;
+}
+
+int countZeroRows(matrix m) {
+    int countZeroR = 0;
+    for (size_t i = 0; i < m.nRows; i++) {
+        if (countValues(m.values[i], m.nCols, 0) == m.nCols)
+            countZeroR++;
+    }
+    return countZeroR;
+}
+
+void printMatrixWithMaxZeroRows(matrix *ms, int nMatrix) {
+    int maxZeroMatrix[nMatrix];
+    for (size_t i = 0; i < nMatrix; i++) {
+        maxZeroMatrix[i] = countZeroRows(ms[i]);
+    }
+    int max = maxArray(maxZeroMatrix, nMatrix);
+    for (int i = 0; i < nMatrix; i++)
+        if (maxZeroMatrix[i] == max)
+            outputMatrix(ms[i]);
+}
