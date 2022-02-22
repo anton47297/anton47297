@@ -289,12 +289,34 @@ void getSquareOfMatrixIfSymmetric(matrix *m) {
 /* 5 task */
 
 bool isUnique(long long *a, int n) {
+    for (size_t i = 0; i < n - 1; i++) {
+        for (size_t j = i + 1; j < n; ++j) {
+            if (a[i] == a[j])
+                return false;
+        }
+    }
+    return true;
 }
 
 long long getSum(int *a, int n) {
+    int sum = 0;
+    for (size_t i = 0; i < n; i++) {
+        sum += a[i];
+    }
+    return sum;
 }
 
 void transposeIfMatrixHasNotEqualSumOfRows(matrix m) {
+    int *sum = (int *) malloc(sizeof(int) * m.nRows);
+
+    for (int i = 0; i < m.nRows; ++i) {
+        sum[i] = getSum(m.values[i], m.nCols);
+    }
+
+    if (!isUnique(sum, m.nRows))
+        return;
+
+    transposeSquareMatrix(m);
 }
 
 /* 6 task */
@@ -304,11 +326,11 @@ bool isMutuallyInverseMatrices(matrix m1, matrix m2) {
         return false;
 
     matrix m = mulMatrices(m1, m2);
-    bool res = isEMatrix(m);
+    bool result = isEMatrix(m);
 
     freeMemMatrix(m);
 
-    return res;
+    return result;
 }
 
 /* 7 task */
@@ -370,4 +392,3 @@ int getMinInArea(matrix m) {
 
     return minVl;
 }
-
