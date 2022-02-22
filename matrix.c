@@ -455,3 +455,26 @@ int getNSpecialElement(matrix m) {
     return count;
 }
 
+/* 12 task */
+
+position getLeftMin(matrix m) {
+    position minPos = {0, 0};
+    for (int rIndex = 0; rIndex < m.nRows; ++rIndex) {
+        for (int cIndex = 0; cIndex < m.nCols; ++cIndex) {
+            position pos = {rIndex, cIndex};
+            if (m.values[rIndex][cIndex] < m.values[minPos.rowIndex][minPos.colIndex] ||
+                m.values[rIndex][cIndex] == m.values[minPos.rowIndex][minPos.colIndex] && cIndex < minPos.colIndex)
+                minPos = pos;
+        }
+    }
+    return minPos;
+}
+
+void swapPenultimateRow(matrix m) {
+    position minPos = getLeftMin(m);
+    int *col = malloc(sizeof(int) * m.nRows);
+    for (int rIndex = 0; rIndex < m.nRows; ++rIndex)
+        col[rIndex] = m.values[rIndex][minPos.colIndex];
+    memcpy(m.values[m.nRows - 2], col, sizeof(int) * m.nCols);
+    free(col);
+}
