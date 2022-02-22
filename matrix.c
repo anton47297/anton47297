@@ -539,3 +539,5 @@ int countNonDescendingRowsMatrices(matrix *ms, int nMatrix) {
     }
     return nRightMatrix;
 }
+
+/* 14 task */
