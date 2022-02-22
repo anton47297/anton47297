@@ -85,13 +85,15 @@ void swapColumns(matrix m, int j1, int j2) {
 // матрицы m по не убыванию значения функции criteria
 // применяемой для строк
 void insertionSortRowsMatrixByRowCriteria(matrix m, int (*criteria)(int *, int)) {
-    int rowsCriteria[m.nRows];
-    for (int i = 0; i < m.nRows; i++)
-        rowsCriteria[i] = criteria(m.values[i], m.nRows);
-    for (int i = 1; i < m.nRows; i++) {
-        for (int j = i; j > 0 && rowsCriteria[j - 1] > rowsCriteria[j]; j--) {
-            swap_swap(&rowsCriteria[j - 1], &rowsCriteria[j], sizeof(int));
-            swapRows(m, j, j - 1);
+    int *rows = (int *) malloc(sizeof(int) * m.nRows);
+    for (int rIndex = 0; rIndex < m.nRows; ++rIndex)
+        rows[rIndex] = criteria(m.values[rIndex], m.nCols);
+    for (int rIndex = 1; rIndex < m.nRows; ++rIndex) {
+        int curIndex = rIndex;
+        while (curIndex > 0 && rows[curIndex] < rows[curIndex - 1]) {
+            swapRows(m, curIndex, curIndex - 1);
+            universalSwap(&rows[curIndex], &rows[curIndex - 1], sizeof(int));
+            curIndex--;
         }
     }
 }
@@ -100,17 +102,20 @@ void insertionSortRowsMatrixByRowCriteria(matrix m, int (*criteria)(int *, int))
 // столбцов матрицы m по не убыванию значения функции criteria
 // применяемой для столбцов
 void insertionSortColsMatrixByColCriteria(matrix m, int (*criteria)(int *, int)) {
-    int colsCriteria[m.nCols];
-    for (int i = 0; i < m.nCols; i++) {
-        int colsElements[m.nRows];
-        for (int j = 1; j < m.nRows; j++)
-            colsElements[j] = m.values[j][i];
-        colsCriteria[i] = criteria(colsElements, m.nRows);
+    int *cols = (int *) malloc(sizeof(int) * m.nCols);
+    int *curCols = malloc(sizeof(int) * m.nRows);
+    for (int cIndex = 0; cIndex < m.nCols; ++cIndex) {
+        for (int rIndex = 0; rIndex < m.nRows; ++rIndex) {
+            curCols[rIndex] = m.values[rIndex][cIndex];
+        }
+        cols[cIndex] = criteria(curCols, m.nRows);
     }
-    for (int i = 1; i < m.nCols; i++) {
-        for (int j = i; j > 0 && colsCriteria[j - 1] > colsCriteria[j]; j--) {
-            swap_swap(&colsCriteria[j - 1], &colsCriteria[j], sizeof(int));
-            swapRows(m, j, j - 1);
+    for (int cIndex = 1; cIndex < m.nCols; ++cIndex) {
+        int curIndex = cIndex;
+        while (curIndex > 0 && cols[curIndex] < cols[curIndex - 1]) {
+            swapColumns(m, curIndex, curIndex - 1);
+            universalSwap(&cols[curIndex], &cols[curIndex - 1], sizeof(int));
+            curIndex--;
         }
     }
 }
@@ -167,7 +172,7 @@ void transposeSquareMatrix(matrix m) {
     for (int rIndex = 0; rIndex < m.nRows; ++rIndex) {
         for (int cIndex = 0; cIndex < rIndex; ++cIndex) {
             if (rIndex != cIndex)
-                swap_swap(&m.values[rIndex][cIndex], &m.values[cIndex][rIndex], sizeof(int));
+                universalSwap(&m.values[rIndex][cIndex], &m.values[cIndex][rIndex], sizeof(int));
         }
     }
 }
@@ -235,14 +240,13 @@ void swapRowsWithMinValuesAndMaxValues(matrix m) {
 /* 2 task */
 int getMax(int *a, const size_t n) {
     int max = a[0];
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n; i++)
         if (a[i] > max)
             max = a[i];
-    }
     return max;
 }
 
-void sortRowsByMaxElement(matrix m) {
+void sortRowsByMinElement(matrix m) {
     insertionSortRowsMatrixByRowCriteria(m, getMax);
 }
 
@@ -289,20 +293,16 @@ void getSquareOfMatrixIfSymmetric(matrix *m) {
 /* 5 task */
 
 bool isUnique(long long *a, int n) {
-    for (size_t i = 0; i < n - 1; i++) {
-        for (size_t j = i + 1; j < n; ++j) {
-            if (a[i] == a[j])
-                return false;
-        }
-    }
+    for (int i = 1; i < n; i++)
+        if (a[i] == a[i - 1])
+            return false;
     return true;
 }
 
 long long getSum(int *a, int n) {
     int sum = 0;
-    for (size_t i = 0; i < n; i++) {
+    for (int i = 0; i < n; i++)
         sum += a[i];
-    }
     return sum;
 }
 
@@ -411,7 +411,7 @@ void insertionSortRowsMatrixByRowCriteriaF(matrix m,
     }
     for (int i = 0; i < m.nRows; ++i) {
         for (int j = i; j > 0 && criteriaArray[j - 1] > criteriaArray[j]; j--) {
-            swap_swap(&criteriaArray[j - 1], &criteriaArray[j], sizeof(float));
+            universalSwap(&criteriaArray[j - 1], &criteriaArray[j], sizeof(float));
             swapRows(m, j, j - 1);
         }
     }
@@ -420,6 +420,39 @@ void insertionSortRowsMatrixByRowCriteriaF(matrix m,
 
 void sortByDistances(matrix m) {
     insertionSortRowsMatrixByRowCriteriaF(m, getDistance);
+}
+
+/* 10 task */
+
+int cmp_long_long(const void *pa, const void *pb) {
+    long long arg1 = *(const long long *) pa;
+    long long arg2 = *(const long long *) pb;
+    if (arg1 < arg2)
+        return -1;
+    if (arg1 > arg2)
+        return 1;
+    return 0;
+}
+
+int countNUnique(long long *a, int n) {
+    qsort(a, n, sizeof(long long), cmp_long_long);
+    int count = 1;
+    for (int i = 1; i < n; ++i) {
+        if (a[i] != a[i - 1])
+            count++;
+    }
+    return count;
+}
+
+int countEqClassesByRowsSum(matrix m) {
+    long long *sum = malloc(sizeof(long long) * m.nRows);
+    for (int i = 0; i < m.nRows; ++i)
+        sum[i] = getSum(m.values[i], m.nCols);
+    int res = countNUnique(sum, m.nRows);
+
+    free(sum);
+
+    return res;
 }
 
 /* 11 task */
@@ -475,6 +508,34 @@ void swapPenultimateRow(matrix m) {
     int *col = malloc(sizeof(int) * m.nRows);
     for (int rIndex = 0; rIndex < m.nRows; ++rIndex)
         col[rIndex] = m.values[rIndex][minPos.colIndex];
+
     memcpy(m.values[m.nRows - 2], col, sizeof(int) * m.nCols);
+
     free(col);
+}
+
+/* 13 task */
+
+bool isNonDescendingSorted(int *a, int n) {
+    for (size_t i = 1; i < n; i++) {
+        if (a[i] < a[i - 1])
+            return false;
+    }
+    return true;
+}
+
+bool hasAllNonDescendingRows(matrix m) {
+    for (size_t i = 0; i < m.nRows; i++) {
+        if (!isNonDescendingSorted(m.values[i], m.nCols))
+            return false;
+    }
+    return true;
+}
+
+int countNonDescendingRowsMatrices(matrix *ms, int nMatrix) {
+    int nRightMatrix = 0;
+    for (size_t i = 0; i < nMatrix; i++) {
+        nRightMatrix += hasAllNonDescendingRows(ms[i]);
+    }
+    return nRightMatrix;
 }
