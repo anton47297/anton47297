@@ -1,4 +1,5 @@
 #include "matrix.h"
+#include "matrix.c"
 #include <assert.h>
 
 void test_swapRowsWithMinValuesAndMaxValues() {
