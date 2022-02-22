@@ -421,3 +421,37 @@ void insertionSortRowsMatrixByRowCriteriaF(matrix m,
 void sortByDistances(matrix m) {
     insertionSortRowsMatrixByRowCriteriaF(m, getDistance);
 }
+
+/* 11 task */
+
+int getNSpecialElement(matrix m) {
+    int count = 0;
+
+    for (int rIndex = 0; rIndex < m.nRows; ++rIndex) {
+        for (int cIndex = 0; cIndex < m.nCols; ++cIndex) {
+            bool left = false;
+            if (cIndex == 0)
+                left = true;
+
+            if (!left) {
+                int max = getMax(m.values[rIndex], cIndex);
+                if (max < m.values[rIndex][cIndex])
+                    left = true;
+            }
+
+            bool right = false;
+            if (m.nCols - 1 == cIndex)
+                right = true;
+
+            if (!right) {
+                int min = getMin(m.values[rIndex] + cIndex + 1, m.nCols - cIndex - 1);
+                if (min > m.values[rIndex][cIndex])
+                    right = true;
+            }
+            if (left && right)
+                count++;
+        }
+    }
+    return count;
+}
+
