@@ -85,15 +85,13 @@ void swapColumns(matrix m, int j1, int j2) {
 // матрицы m по не убыванию значения функции criteria
 // применяемой для строк
 void insertionSortRowsMatrixByRowCriteria(matrix m, int (*criteria)(int *, int)) {
-    int *rows = (int *) malloc(sizeof(int) * m.nRows);
-    for (int rIndex = 0; rIndex < m.nRows; ++rIndex)
-        rows[rIndex] = criteria(m.values[rIndex], m.nCols);
-    for (int rIndex = 1; rIndex < m.nRows; ++rIndex) {
-        int curIndex = rIndex;
-        while (curIndex > 0 && rows[curIndex] < rows[curIndex - 1]) {
-            swapRows(m, curIndex, curIndex - 1);
-            universalSwap(&rows[curIndex], &rows[curIndex - 1], sizeof(int));
-            curIndex--;
+    int rowsCriteria[m.nRows];
+    for (int i = 0; i < m.nRows; i++)
+        rowsCriteria[i] = criteria(m.values[i], m.nRows);
+    for (int i = 1; i < m.nRows; i++) {
+        for (int j = i; j > 0 && rowsCriteria[j - 1] > rowsCriteria[j]; j--) {
+            universalSwap(&rowsCriteria[j - 1], &rowsCriteria[j], sizeof(int));
+            swapRows(m, j, j - 1);
         }
     }
 }
@@ -102,20 +100,17 @@ void insertionSortRowsMatrixByRowCriteria(matrix m, int (*criteria)(int *, int))
 // столбцов матрицы m по не убыванию значения функции criteria
 // применяемой для столбцов
 void insertionSortColsMatrixByColCriteria(matrix m, int (*criteria)(int *, int)) {
-    int *cols = (int *) malloc(sizeof(int) * m.nCols);
-    int *curCols = malloc(sizeof(int) * m.nRows);
-    for (int cIndex = 0; cIndex < m.nCols; ++cIndex) {
-        for (int rIndex = 0; rIndex < m.nRows; ++rIndex) {
-            curCols[rIndex] = m.values[rIndex][cIndex];
-        }
-        cols[cIndex] = criteria(curCols, m.nRows);
+    int colsCriteria[m.nCols];
+    for (int i = 0; i < m.nCols; i++) {
+        int colsElements[m.nRows];
+        for (int j = 1; j < m.nRows; j++)
+            colsElements[j] = m.values[j][i];
+        colsCriteria[i] = criteria(colsElements, m.nRows);
     }
-    for (int cIndex = 1; cIndex < m.nCols; ++cIndex) {
-        int curIndex = cIndex;
-        while (curIndex > 0 && cols[curIndex] < cols[curIndex - 1]) {
-            swapColumns(m, curIndex, curIndex - 1);
-            universalSwap(&cols[curIndex], &cols[curIndex - 1], sizeof(int));
-            curIndex--;
+    for (int i = 1; i < m.nCols; i++) {
+        for (int j = i; j > 0 && colsCriteria[j - 1] > colsCriteria[j]; j--) {
+            universalSwap(&colsCriteria[j - 1], &colsCriteria[j], sizeof(int));
+            swapRows(m, j, j - 1);
         }
     }
 }
@@ -204,7 +199,7 @@ position getMaxValuePos(matrix m) {
 }
 
 // возвращает матрицу, размера nRows на nRows,
-// построенного из элементов массива a, размещенную в динамической
+// построенного из элементов массива а, размещенную в динамической
 // памяти
 matrix createMatrixFromArray(const int *a, size_t nRows, size_t nCols) {
     matrix m = getMemMatrix(nRows, nCols);
@@ -216,7 +211,7 @@ matrix createMatrixFromArray(const int *a, size_t nRows, size_t nCols) {
 }
 
 // возвращает указатель на нулевую матрицу массива из nMatrices матриц, размещенных
-// в динамической памяти, построенных из элементов массива a
+// в динамической памяти, построенных из элементов массива а
 matrix *createArrayOfMatrixFromArray(const int *values, size_t nMatrices, size_t nRows, size_t nCols) {
     matrix *ms = getMemArrayOfMatrices(nMatrices, nRows, nCols);
     int l = 0;
@@ -227,7 +222,8 @@ matrix *createArrayOfMatrixFromArray(const int *values, size_t nMatrices, size_t
     return ms;
 }
 
-/* 2 часть */
+/*                       2 часть
+                                                                     */
 
 /* 1 task */
 void swapRowsWithMinValuesAndMaxValues(matrix m) {
@@ -308,7 +304,6 @@ long long getSum(int *a, int n) {
 
 void transposeIfMatrixHasNotEqualSumOfRows(matrix m) {
     int *sum = (int *) malloc(sizeof(int) * m.nRows);
-
     for (int i = 0; i < m.nRows; ++i) {
         sum[i] = getSum(m.values[i], m.nCols);
     }
